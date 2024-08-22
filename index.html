@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заявка на оплату импортных товаров</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="radio"], input[type="checkbox"] {
+            margin-bottom: 15px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group, .radio-group {
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group div, .radio-group div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input[type="checkbox"], input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .additional-fields, .additional-fields-import {
+            display: none;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Заявка на оплату импортных товаров</h1>
+        <p>В заявке вы укажете свои контактные данные, а также заполните небольшой опрос касающийся деталей вашей сделки. Первые 3 вопроса являются обязательными для заполнения.</p>
+        
+        <form>
+            <label for="phone">Укажите номер телефона *</label>
+            <input type="text" id="phone" name="phone" placeholder="+7(---)--- -- --" required>
+
+            <label>Удобный способ связи *</label>
+            <div class="checkbox-group">
+                <div>
+                    <input type="checkbox" id="phone_call" name="contact_method" value="Телефонный звонок" required>
+                    <label for="phone_call">Телефонный звонок</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="telegram" name="contact_method" value="Telegram">
+                    <label for="telegram">Telegram</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="whatsapp" name="contact_method" value="WhatsApp">
+                    <label for="whatsapp">WhatsApp</label>
+                </div>
+            </div>
+
+            <label>В какой ситуации сейчас находится ваша сделка? *</label>
+            <div class="radio-group">
+                <div>
+                    <input type="radio" id="situation1" name="situation" value="situation1" onclick="showAdditionalFields()">
+                    <label for="situation1">Контрагент готов отгружать товар напрямую моей компании...</label>
+                </div>
+                <div>
+                    <input type="radio" id="situation2" name="situation" value="situation2" onclick="showAdditionalFields()">
+                    <label for="situation2">Контрагент готов отгружать, но товар входит в списки двойного назначения...</label>
+                </div>
+                <div>
+                    <input type="radio" id="situation3" name="situation" value="situation3" onclick="showAdditionalFields()">
+                    <label for="situation3">Товар нужен, но контрагент не готов отгружать товары в РФ...</label>
+                </div>
+                <div>
+                    <input type="radio" id="situation4" name="situation" value="situation4" onclick="showImportFields()">
+                    <label for="situation4">Товар нужен импортный и из-за рубежа...</label>
+                </div>
+            </div>
+
+            <div class="additional-fields" id="additional-fields">
+                <label for="amount">Сумма и валюта сделки *</label>
+                <input type="text" id="amount" name="amount" placeholder="Сумма и валюта" required>
+
+                <label for="country">Страна оплаты *</label>
+                <input type="text" id="country" name="country" placeholder="Страна оплаты" required>
+
+                <label for="tnved">Код ТНВЭД и/или наименование товара, а также сфера применения товара *</label>
+                <input type="text" id="tnved" name="tnved" placeholder="Код ТНВЭД и/или наименование товара" required>
+
+                <label for="swift">СВИФТ банка контрагента *</label>
+                <input type="text" id="swift" name="swift" placeholder="СВИФТ банка контрагента" required>
+
+                <label for="counterparty">Название контрагента *</label>
+                <input type="text" id="counterparty" name="counterparty" placeholder="Название контрагента" required>
+            </div>
+
+            <div class="additional-fields-import" id="additional-fields-import">
+                <label for="product_name">Название товара и/или ссылка на товар (wb/ozon/1688/amazon/alibaba) *</label>
+                <input type="text" id="product_name" name="product_name" placeholder="Название товара и/или ссылка" required>
+
+                <label for="price">Предполагаемая цена товара в РФ либо ожидаемая цена закупки в Китае *</label>
+                <input type="text" id="price" name="price" placeholder="Цена товара" required>
+
+                <label for="quantity">Количество товара (предполагаемый объем) в шт/массе *</label>
+                <input type="text" id="quantity" name="quantity" placeholder="Количество товара" required>
+
+                <label for="imported_before">Импортировали ли вы товар ранее? *</label>
+                <input type="text" id="imported_before" name="imported_before" placeholder="Да/Нет" required>
+
+                <label for="requirements">Требования от производителя товара (упаковка/маркировка и т.д.) *</label>
+                <input type="text" id="requirements" name="requirements" placeholder="Требования от производителя" required>
+
+                <label for="suppliers">Список потенциальных поставщиков вашего товара (если есть)</label>
+                <input type="text" id="suppliers" name="suppliers" placeholder="Потенциальные поставщики">
+
+                <label for="additional_info">Дополнительная информация важная для обработки вашего заказа</label>
+                <input type="text" id="additional_info" name="additional_info" placeholder="Дополнительная информация">
+            </div>
+
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+    <!-- Подключение скриптов -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7/inputmask.min.js"></script>
+    <script>
+        function showAdditionalFields() {
+            document.getElementById('additional-fields').style.display = 'block';
+            document.getElementById('additional-fields-import').style.display = 'none';
+        }
+
+        function showImportFields() {
+            document.getElementById('additional-fields').style.display = 'none';
+            document.getElementById('additional-fields-import').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
